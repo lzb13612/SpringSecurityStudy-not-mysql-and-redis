@@ -30,4 +30,9 @@ public class LoginController {
     public String err(){
         return "redirect:error.html";
     }
+
+    @RequestMapping("demo")
+    public String demo(){
+        return "demo";
+    }
 }
