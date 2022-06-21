@@ -57,9 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 批量授权
                 //.antMatchers("/main1.html").hasAnyAuthority("admin", "admins")
                 // 角色判断,默认有ROLE_开头的
-                .antMatchers("/main1.html").hasRole("abc")
-//                .anyRequest().authenticated()
-                .anyRequest().access("@myServiceImpl.hasPermission(request , authentication)");
+//                .antMatchers("/main1.html").hasRole("abc")
+                .anyRequest().authenticated();
+//                .anyRequest().access("@myServiceImpl.hasPermission(request , authentication)");
 
         // 关闭跨域防护
         http.csrf().disable();
