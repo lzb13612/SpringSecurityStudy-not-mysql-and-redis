@@ -12,5 +12,20 @@ credentials:<span sec:authentication="credentials"></span><br/>
 authorities:<span sec:authentication="authorities"></span><br/>
 remoteAddress:<span sec:authentication="details.remoteAddress"></span><br/>
 sessionId:<span sec:authentication="details.sessionId"></span>
+
+<br />
+通过权限判断：
+<button sec:authorize="hasAuthority('/insert')">new</button>
+<button sec:authorize="hasAuthority('/delete')">delete</button>
+<button sec:authorize="hasAuthority('/update')">update</button>
+<button sec:authorize="hasAuthority('/select')">query</button>
+<br />
+<br />
+通过角色判断：
+<button sec:authorize="hasRole('abc')">new</button>
+<button sec:authorize="hasRole('abc')">delete</button>
+<button sec:authorize="hasRole('abc')">update</button>
+<button sec:authorize="hasRole('abc')">query</button>
+<br />
 </body>
 </html>
