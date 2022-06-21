@@ -9,8 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 /**
  * @author lzb
@@ -21,6 +26,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyAccessDeniedHandler myAccessDeniedHandler;
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private DataSource dataSource;
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
 
 
     @Override
@@ -66,10 +77,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.exceptionHandling()
                 .accessDeniedHandler(myAccessDeniedHandler);
+
+        http.rememberMe()
+                // 失效时间，单位秒
+                .tokenValiditySeconds(60)
+                // 自定义参数名称
+                .rememberMeParameter("remember-me")
+                // 自定义登录逻辑
+                .userDetailsService(userDetailsService)
+                // 持久登录
+                .tokenRepository(persistentTokenRepository);
     }
 
     @Bean
     public PasswordEncoder getPw(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public PersistentTokenRepository getPersistentTokenRepository(){
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        // 自动建表,第一次启动需要，第二次启动注释
+        // jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
     }
 }
