@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 当检测到为/login时则认做登录，必须与表单提交地址一致，以此执行UserDetailsServiceImpl
                 .loginProcessingUrl("/login")
                 // 自定义登录页面
-                .loginPage("/login.html")
+                .loginPage("/login")
                 // 自定义用户名参数（前端）
                 .usernameParameter("username")
                 // 自定义密码参数（前端）
@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 // login.html不需要认证
-                .antMatchers("/login.html", "/error.html").permitAll()
+                .antMatchers("/login", "/error.html").permitAll()
                 // 正则匹配
                 //.regexMatchers(".+[.]png").permitAll()
                 //.regexMatchers(HttpMethod.POST,"/demo").permitAll()
@@ -73,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .anyRequest().access("@myServiceImpl.hasPermission(request , authentication)");
 
         // 关闭跨域防护
-        http.csrf().disable();
+        //http.csrf().disable();
 
         http.exceptionHandling()
                 .accessDeniedHandler(myAccessDeniedHandler);
